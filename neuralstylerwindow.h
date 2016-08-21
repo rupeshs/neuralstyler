@@ -1,0 +1,104 @@
+/*
+    NeuralStyler,Artistic style for your videos
+    Copyright(C) 2016 Rupesh Sreeraman
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+#ifndef NEURALSTYLERWINDOW_H
+#define NEURALSTYLERWINDOW_H
+
+#include <QMainWindow>
+#include <QFileDialog>
+#include <ffmpegprocess.h>
+#include <stylechainer.h>
+#include <QDebug>
+#include <QProcess>
+#include <QDir>
+#include <paths.h>
+#include <QTime>
+#include <QDesktopServices>
+#include <QMessageBox>
+#include <aboutdialog.h>
+#include <QPointer>
+#include <QTimer>
+
+namespace Ui {
+class NeuralStylerWindow;
+}
+
+class NeuralStylerWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit NeuralStylerWindow(QWidget *parent = 0);
+    ~NeuralStylerWindow();
+
+
+private slots:
+    void on_pushButonBrowseFile_clicked();
+    void on_pushButtonProcess_clicked();
+
+    void fpsStarted();
+    void fpsCompleted(int ec);
+
+    void frameExtratorStarted();
+    void frameExtratorCompleted(int ec);
+
+    void audioExtratorStarted();
+    void audioExtratorCompleted(int ec);
+
+    void fastNeuralStyleStarted();
+    void fastNeuralStyleCompleted(int ec);
+
+    void styledVideoStarted();
+    void styledVideoCompleted(int ec);
+
+    void gotFrame(QString fnum);
+
+    void on_comboBoxStyles_currentIndexChanged(const QString &arg1);
+
+    void on_pushButtonOpenOutput_clicked();
+
+    void on_actionAbout_triggered();
+    void update();
+    void finishStyling();
+
+private:
+    Ui::NeuralStylerWindow *ui;
+    QPointer<FfmpegProcess> ffmpeg;
+    QPointer<StyleChainer> fastNeuralStyle;
+    Paths *paths;
+
+    QStringList lstFrames;
+
+    void getFramePerSec();//Get fps using ffmpeg
+    void extractFrames(); //Extract all frames
+    void extractAudio(); //Extract Audio
+    void styleFrames(); //Style frames
+    void chainerProcess();//invoke fast neural style transfer
+    void createStyledVideo();//Save video
+
+    long processingFrameCount;
+
+    QString strFramesPerSec;
+    QString strDuration;
+    long elaspsedTime;
+    int64_t frameCount;
+
+    AboutDialog  *aboutDlg;
+    QTime tElapsed;
+    QTimer *timer;
+
+};
+
+#endif // NEURALSTYLERWINDOW_H
