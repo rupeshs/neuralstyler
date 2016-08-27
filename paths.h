@@ -1,5 +1,5 @@
 /*
-    NeuralStyler,Artistic style for your videos
+    NeuralStyler,Artistic style for your videos/photos
     Copyright(C) 2016 Rupesh Sreeraman
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,18 +18,19 @@
 #define PATHS_H
 #include<QString>
 #include <QDir>
+#include <QDebug>
 
 class Paths
 {
 public:
     Paths(QString appPath);
 
-    inline  QString getStyledVideoPath(){return strStyledVideoPath+QDir::separator();}
-    inline  QString getAudioPath(){return strAudioPath+QDir::separator();}
-    inline  QString getStylePath(){return strStylePath+QDir::separator();}
-    inline  QString getFramePath(){return strFramePath+QDir::separator();}
+    inline  QString getStyledVideoPath(){return strStyledVideoPath+"/";}
+    inline  QString getAudioPath(){return strAudioPath+"/";}
+    inline  QString getStylePath(){return strStylePath+"/";}
+    inline  QString getFramePath(){return strFramePath+"/";}
     inline  QString getAppPath(){return strAppPath;}
-    inline  QString getStyledFramePath(){return strStyledFramePath+QDir::separator();}
+    inline  QString getStyledFramePath(){return strStyledFramePath+"/";}
 
     void ensureFramePath();
     void ensureAudioPath();
@@ -45,5 +46,6 @@ private:
     QString strStylePath;
     void ensurePath(QString pth);
 };
+typedef __int64 int64_t;
 
 #endif // PATHS_H

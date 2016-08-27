@@ -1,5 +1,5 @@
 /*
-    NeuralStyler,Artistic style for your videos
+    NeuralStyler,Artistic style for your videos/photos
     Copyright(C) 2016 Rupesh Sreeraman
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,8 +35,13 @@ void StyleChainer::readyReadStandardOutput()
 
 }
 void StyleChainer::sytleIt()
-{
-    //qDebug()<<arguments();
-    this->start(strAppPath+"env/bin/python",arguments());
+{qDebug()<<arguments();
+#ifdef Q_OS_WIN
+     this->start(strAppPath+"env/python.exe",arguments());
+#endif
+#ifdef Q_OS_LINUX
+     this->start(strAppPath+"env/bin/python",arguments());
+# endif
+
 }
 

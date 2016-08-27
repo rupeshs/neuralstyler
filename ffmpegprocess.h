@@ -1,5 +1,5 @@
 /*
-    NeuralStyler,Artistic style for your videos
+    NeuralStyler,Artistic style for your videos/photos
     Copyright(C) 2016 Rupesh Sreeraman
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,9 +39,9 @@ public:
 signals:
     void gotFrame(QString frameNumber);
 public slots:
-     void readyReadStandardError();
+    void readyReadStandardError();
 
- private:
+private:
     QString strFps;
     QString strDuration;
     QString strConsoleErr;

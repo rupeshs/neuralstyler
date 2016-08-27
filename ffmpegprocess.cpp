@@ -1,5 +1,5 @@
 /*
-    NeuralStyler,Artistic style for your videos
+    NeuralStyler,Artistic style for your videos/photos
     Copyright(C) 2016 Rupesh Sreeraman
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,12 +23,17 @@ FfmpegProcess::FfmpegProcess()
 }
 void FfmpegProcess::startFfmpeg()
 {
-    //qDebug()<<arguments();
+    qDebug()<<arguments();
     strFps="";
+
+#ifdef Q_OS_WIN
+    this->start("ffmpeg.exe",arguments());
+#endif
+#ifdef Q_OS_LINUX
     this->start("./ffmpeg",arguments());
+# endif
+
 }
-
-
 void FfmpegProcess::readyReadStandardError()
 {
 
@@ -39,7 +44,7 @@ void FfmpegProcess::readyReadStandardError()
 
         if (rx_frame_ct.indexIn( strConsoleLines.at(i))>-1) {
 
-           // qDebug()<<rx_frame_ct.cap(1);
+            // qDebug()<<rx_frame_ct.cap(1);
             QString frameCount=rx_frame_ct.cap(1);
             emit gotFrame(frameCount);
 
@@ -47,21 +52,20 @@ void FfmpegProcess::readyReadStandardError()
     }
     if (rx_fps.indexIn(strConsoleErr)>-1) {
 
-       // qDebug()<<rx_fps.cap(1);
+        // qDebug()<<rx_fps.cap(1);
         strFps=rx_fps.cap(1);
     }
     if (rx_fps_num.indexIn(strConsoleErr)>-1) {
 
-       // qDebug()<<rx_fps_num.cap(1);
+        // qDebug()<<rx_fps_num.cap(1);
         if (strFps.compare("")==0)
             strFps=rx_fps_num.cap(1);
     }
     if (rx_duration.indexIn(strConsoleErr)>-1) {
         strDuration=rx_duration.cap(1);
         //qDebug()<<rx_duration.cap(1);
-       // strFps=rx_time.cap(1);
+        // strFps=rx_time.cap(1);
     }
-
-  // qDebug()<< strConsoleErr;
+    //qDebug()<< strConsoleErr;
 
 }

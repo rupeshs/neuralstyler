@@ -1,5 +1,5 @@
 /*
-    NeuralStyler,Artistic style for your videos
+    NeuralStyler,Artistic style for your videos/photos
     Copyright(C) 2016 Rupesh Sreeraman
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,8 +25,6 @@ NeuralStylerWindow::NeuralStylerWindow(QWidget *parent) :
     ui->setupUi(this);
     // QCoreApplication::addLibraryPath(qApp->applicationDirPath()+QDir::separator()+"platforms");
     paths=new Paths(qApp->applicationDirPath());
-
-
     QDir styleDir(paths->getStylePath());
     QStringList filters;
     QStringList lstStyles;
@@ -44,8 +42,6 @@ NeuralStylerWindow::NeuralStylerWindow(QWidget *parent) :
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     // createStyledVideo();
-
-
 }
 
 NeuralStylerWindow::~NeuralStylerWindow()
@@ -65,15 +61,12 @@ void NeuralStylerWindow::on_pushButonBrowseFile_clicked()
 
 void NeuralStylerWindow::on_pushButtonProcess_clicked()
 {
-
-
     tElapsed.start();
     timer->start(1000);
 
     if (!QFile(ui->lineEditFilePath->text()).exists()){
         QMessageBox::critical(this,qApp->applicationName(),"Please provide a valid file!");
         return;
-
     }
     //ui->pushButtonProcess->setText("Cancel");
     ui->progressBarOverall->setValue(0);
@@ -91,28 +84,21 @@ void NeuralStylerWindow::on_pushButtonProcess_clicked()
 
     getFramePerSec();
 
-
-
-
 }
 void NeuralStylerWindow::fpsStarted()
 {
     qDebug()<<"Get fps";
 
-
 }
 void NeuralStylerWindow::fpsCompleted(int ec)
 {
-
-
-
     ui->labelStatus->setText("Extracting frames...");
     strFramesPerSec=ffmpeg->getFps();
     qDebug()<<"fps ok "<<strFramesPerSec;
     strDuration=ffmpeg->getDuration();
 
     QTime totTime=QTime::fromString(strDuration.trimmed(),"hh:mm:ss.z");
-  //  qDebug()<<"Video Duration :"<< strDuration;
+    //  qDebug()<<"Video Duration :"<< strDuration;
     qDebug()<<"Video Duration :"<<totTime.toString();
     // totTime.secsTo();
     int durationSec=QTime(0,0,0).secsTo(totTime);
@@ -124,7 +110,6 @@ void NeuralStylerWindow::fpsCompleted(int ec)
     ui->progressBarFrame->setValue(0);
     ffmpeg->deleteLater();
 
-
     ui->progressBarOverall->setValue(16);
     extractFrames();
 
@@ -132,7 +117,6 @@ void NeuralStylerWindow::fpsCompleted(int ec)
 
 void NeuralStylerWindow::getFramePerSec()
 {
-
     strFramesPerSec="";
     ffmpeg=new FfmpegProcess();
     connect(ffmpeg,SIGNAL(started()),this,SLOT(fpsStarted()));
@@ -146,8 +130,6 @@ void NeuralStylerWindow::getFramePerSec()
 }
 void NeuralStylerWindow::extractFrames()
 {
-
-
     ui->progressBarOverall->setValue(33);
     //./ffmpeg -i strip_jp.mkv -vf scale=320:240 frames/frame%05d.jpg
     ffmpeg=new FfmpegProcess();
@@ -155,11 +137,12 @@ void NeuralStylerWindow::extractFrames()
     connect(ffmpeg,SIGNAL(finished(int)),this,SLOT(frameExtratorCompleted(int)));
     connect(ffmpeg,SIGNAL(gotFrame(QString)),this,SLOT(gotFrame(QString)));
     QStringList arguments;
-    arguments << "-i" << ui->lineEditFilePath->text()<<"-vf"<<"scale="+ui->comboBoxResolution->currentText().replace("x",":")<<"frames/frame%05d.jpg";
-
+    //arguments << "-i" << ui->lineEditFilePath->text()<<"-vf"<<"scale="+ui->comboBoxResolution->currentText().replace("x",":")<<"frames/frame%05d.jpg";
+    arguments << "-i" << ui->lineEditFilePath->text()<<"-vf"<<"scale="+ui->comboBoxResolution->currentText().replace("x",":")<<paths->getFramePath()+"frame%05d.jpg";
 
     ffmpeg->setArguments(arguments);
     ffmpeg->startFfmpeg();
+
 }
 void NeuralStylerWindow::frameExtratorStarted()
 {
@@ -175,11 +158,10 @@ void NeuralStylerWindow::frameExtratorCompleted(int ec)
     ui->progressBarFrame->setValue(100);
     ui->labelStatus->setText("Extracting audio..");
     extractAudio();
+
 }
 void NeuralStylerWindow::extractAudio()
 {
-
-
     ffmpeg=new FfmpegProcess();
     connect(ffmpeg,SIGNAL(started()),this,SLOT(audioExtratorStarted()));
     connect(ffmpeg,SIGNAL(finished(int)),this,SLOT(audioExtratorCompleted(int)));
@@ -209,7 +191,6 @@ void NeuralStylerWindow::audioExtratorCompleted(int ec)
 
 void NeuralStylerWindow::styleFrames()
 {
-
     QDir framesDir(paths->getFramePath());
     QStringList filters;
     filters<<"*.jpg";
@@ -242,11 +223,12 @@ void NeuralStylerWindow::fastNeuralStyleCompleted(int ec)
 void NeuralStylerWindow::chainerProcess()
 {
     processingFrameCount++;
-    if (processingFrameCount<=lstFrames.count())
-    {
+    if (processingFrameCount<=lstFrames.count()){
+
         ui->labelStatus->setText("Artistic styling frame "+QString::number(processingFrameCount)+" of "+QString::number(lstFrames.count()));
         float per=(float)processingFrameCount/(float)lstFrames.count();
         ui->progressBarFrame->setValue(per*100);
+
         fastNeuralStyle=new StyleChainer();
         fastNeuralStyle->setAppPath(paths->getAppPath());
         connect(fastNeuralStyle,SIGNAL(started()),this,SLOT(fastNeuralStyleStarted()));
@@ -257,9 +239,8 @@ void NeuralStylerWindow::chainerProcess()
                     "-o"<<paths->getStyledFramePath()+lstFrames.at(processingFrameCount-1);
         fastNeuralStyle->setArguments(arguments);
         fastNeuralStyle->sytleIt();
-    }
-    else
-    {
+    } else {
+
         createStyledVideo();
 
     }
@@ -279,14 +260,14 @@ void NeuralStylerWindow::createStyledVideo()
     //Handle Video ->MP4
     if(fileInfo.suffix().toLower().compare("gif")!=0) {
 
-        if (QFile(paths->getAudioPath()+"audio.wav").exists()){
+        if (QFile(paths->getAudioPath()+"audio.wav").exists()&&strFramesPerSec.compare("")!=0){
 
             //video
             arguments  << "-framerate" << strFramesPerSec
                        <<"-i"<<paths->getStyledFramePath()+"frame%05d.jpg"
-                       <<"-i"<< paths->getAudioPath()+"audio.wav"
-                       <<"-c:a"<<"aac"<< "-strict"<<"-2"
-                       <<"-y"<<paths->getStyledVideoPath()+fileInfo.baseName()+"_"+ui->comboBoxStyles->currentText()+".mp4";
+                      <<"-i"<< paths->getAudioPath()+"audio.wav"
+                     <<"-c:a"<<"aac"<< "-strict"<<"-2"
+                    <<"-y"<<paths->getStyledVideoPath()+fileInfo.baseName()+"_"+ui->comboBoxStyles->currentText()+".mp4";
 
         } else {
 
@@ -313,24 +294,24 @@ void NeuralStylerWindow::createStyledVideo()
                 return ;
 
             } else {
-                  //Video with out audio
-                  arguments  << "-framerate" << strFramesPerSec
+                //Video with out audio
+                arguments  << "-framerate" << strFramesPerSec
                            <<"-i"<<paths->getStyledFramePath()+"frame%05d.jpg"
-                           <<"-y"<<paths->getStyledVideoPath()+fileInfo.baseName()+"_"+ui->comboBoxStyles->currentText()+".mp4";
-
-                  }
-
+                          <<"-y"<<paths->getStyledVideoPath()+fileInfo.baseName()+"_"+ui->comboBoxStyles->currentText()+".mp4";
 
             }
 
-        } else {
+
+        }
+
+    } else {
 
         //GIF
-         arguments  << "-framerate" << strFramesPerSec
-                    <<"-i"<<paths->getStyledFramePath()+"frame%05d.jpg"
-                    <<"-y"<<paths->getStyledVideoPath()+fileInfo.baseName()+"_"+ui->comboBoxStyles->currentText()+".gif";
+        arguments  << "-framerate" << strFramesPerSec
+                   <<"-i"<<paths->getStyledFramePath()+"frame%05d.jpg"
+                  <<"-y"<<paths->getStyledVideoPath()+fileInfo.baseName()+"_"+ui->comboBoxStyles->currentText()+".gif";
 
-         }
+    }
 
 
     ffmpeg->setArguments(arguments);
@@ -365,8 +346,6 @@ void NeuralStylerWindow::gotFrame(QString fnum)
 
         ui->progressBarFrame->setValue(per*100);
     }
-
-
 }
 
 void NeuralStylerWindow::on_comboBoxStyles_currentIndexChanged(const QString &arg1)
@@ -395,14 +374,12 @@ void NeuralStylerWindow::on_actionAbout_triggered()
 }
 void NeuralStylerWindow::update()
 {
-
     //qDebug()<<tm.toString("hh:mm:ss");
     ui->labelElapsedTime->setText( QTime(0,0,0,0).addMSecs(tElapsed.elapsed()).toString("hh:mm:ss"));
 }
 
 void NeuralStylerWindow::finishStyling()
 {
-
     ui->labelStatus->setText("Styled video created");
     ui->groupBox->setDisabled(false);
     timer->stop();

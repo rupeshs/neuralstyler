@@ -23,7 +23,8 @@ HEADERS  += neuralstylerwindow.h \
     ffmpegprocess.h \
     paths.h \
     stylechainer.h \
-    aboutdialog.h
+    aboutdialog.h \
+    WinVersion.h
 
 FORMS    += neuralstylerwindow.ui \
     aboutdialog.ui
@@ -37,3 +38,4 @@ TARGET=neuralstyler
 
 RESOURCES += \
     neuralstyler.qrc
+RC_FILE = neuralstyler.rc

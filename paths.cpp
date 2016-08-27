@@ -1,5 +1,5 @@
 /*
-    NeuralStyler,Artistic style for your videos
+    NeuralStyler,Artistic style for your videos/photos
     Copyright(C) 2016 Rupesh Sreeraman
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,12 +20,21 @@ Paths::Paths(QString appPath)
 {
 
     //All path init
-    strAppPath=appPath+QDir::separator();
-    strFramePath = appPath+QDir::separator()+"frames";
-    strAudioPath = appPath+QDir::separator()+"audio";
-    strStyledFramePath = appPath+QDir::separator()+"sframes";
-    strStyledVideoPath = appPath+QDir::separator()+"styledvideo";
-    strStylePath=appPath+QDir::separator()+"styles";
+    strAppPath=appPath+"/";
+    strFramePath = appPath+"/frames";
+    strAudioPath = appPath+"/audio";
+    strStyledFramePath = appPath+"/sframes";
+    strStyledVideoPath = appPath+"/styledvideo";
+    strStylePath=appPath+"/styles";
+
+    qDebug()<<"Paths:App"<<strAppPath;
+    qDebug()<<"Paths:Frame"<<strFramePath;
+    qDebug()<<"Paths:Audio"<<strAudioPath;
+    qDebug()<<"Paths:sFrame"<<strStyledFramePath;
+    qDebug()<<"Paths:Video"<<strStyledVideoPath;
+    qDebug()<<"Paths:Styles"<<strStylePath;
+
+
 
 }
 

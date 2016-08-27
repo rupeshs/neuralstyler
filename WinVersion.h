@@ -13,33 +13,22 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef STYLECHAINER_H
-#define STYLECHAINER_H
 
-#include <QObject>
-#include <QProcess>
-#include <QDebug>
-#include <QRegExp>
+#ifndef WINVERSION_H
+#define WINVERSION_H
 
-static QRegExp rx_time("(\\d*\\.\\d+)*.sec");
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         "1.0.0.0\0"
 
-class StyleChainer: public QProcess
-{
-    Q_OBJECT
+#define VER_PRODUCTVERSION          1,0,0,0
+#define VER_PRODUCTVERSION_STR      "1.0.0.0\0"
 
-public:
-    StyleChainer();
-    void setAppPath(QString appPath){strAppPath=appPath;}
-    QString getProcessingTime(){return strElaspedTime;}
+#define VER_COMPANYNAME_STR         "Rupesh Sreeraman\0"
+#define VER_FILEDESCRIPTION_STR     "NeuralStyler 1.0.0 \0"
+#define VER_INTERNALNAME_STR        "neuralstyler\0"
+#define VER_LEGALCOPYRIGHT_STR      "Copyright (c)2016 Rupesh Sreeraman\0"
+#define VER_ORIGINALFILENAME_STR    "neuralstyler.exe\0"
+#define VER_PRODUCTNAME_STR         "NeuralStyler\0"
+#define VER_COMPANYDOMAIN_STR       "http://neuralstyler.com/"
 
-public slots:
-    void readyReadStandardOutput();
-    void sytleIt();
-
-private:
-    QString strElaspedTime;
-    QString strConsoleOut;
-    QString strAppPath;
-};
-
-#endif // STYLECHAINER_H
+#endif // WINVERSION_H
