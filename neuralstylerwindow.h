@@ -38,13 +38,12 @@ paint icon :http://findicons.com/icon/85674/paint?id=85674
 #include <styleintensitydialog.h>
 #include <QBitArray>
 #include "qxtspanslider.h"
-#include "mpvwidget.h"
 #include <QCloseEvent>
 #include "framedialog.h"
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
-
+#include <mplayer.h>
 namespace Ui {
 class NeuralStylerWindow;
 }
@@ -90,7 +89,7 @@ private slots:
     void finishStyling();
 
     void seek(int pos);
-    void setSliderRange(int duration);
+    void setSliderRange(float duration);
     bool isImageOrGif();
     bool isGif();
 
@@ -128,7 +127,9 @@ private:
     QPointer<StyleChainer> fastNeuralStyle;
 
     Paths *paths;
-    MpvWidget *m_mpv;
+    //MpvWidget *m_mpv;
+    QPointer<Mplayer> mp;
+    QLabel    *mplayerVideo;
 
     QStringList lstFrames;
 
@@ -155,9 +156,11 @@ private:
     QLabel *videoTimeLabel;
     QLabel *videoStatusLabel;
 
+
     QSettings *settings;
     QBitArray *bitSettingsFirstRun;
 
+    QString mPath;
 
 };
 

@@ -43,18 +43,38 @@ NeuralStylerWindow::NeuralStylerWindow(QWidget *parent) :
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 
-     m_mpv = new MpvWidget(this);
-     connect(ui->frameSlider, SIGNAL(lowerValueChanged(int)), SLOT(seek(int)));
-     connect(ui->frameSlider, SIGNAL(upperValueChanged(int)), SLOT(seek(int)));
-     connect(m_mpv, SIGNAL(durationChanged(int)), this, SLOT(setSliderRange(int)));
+    // m_mpv = new MpvWidget(this);
+#ifdef Q_OS_WIN
+    mPath= qApp->applicationDirPath()+ "/mplayer/mplayer.exe";
+#endif
+#ifdef Q_OS_LINUX
+    mPath="/usr/bin/mplayer";
+# endif
+#ifdef Q_OS_OPENBSD
+    mPath="/usr/local/bin/mplayer";
+# endif
+     qDebug()<<mPath;
+    mp=new Mplayer();
+    mp->setMplayerPath(mPath);
+    connect(mp,SIGNAL(gotduration(float)),this,SLOT(setSliderRange(float)));
+    connect(ui->frameSlider, SIGNAL(lowerValueChanged(int)), SLOT(seek(int)));
+    connect(ui->frameSlider, SIGNAL(upperValueChanged(int)), SLOT(seek(int)));
 
-     m_mpv->setGeometry(0,0,261,181);
+     mplayerVideo=new QLabel(this);
+     mplayerVideo->setGeometry(0,0,261,181);
+     mplayerVideo->setMinimumWidth(261);
+
+
+     mplayerVideo->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
+     mplayerVideo->setStyleSheet("background-color:black;");
+     mp->setVideoWin(mplayerVideo->winId());
+
      QVBoxLayout *vl = new QVBoxLayout();
 
      videoTimeLabel = new QLabel("00:00:00");
      videoStatusLabel = new QLabel("Select video section");
 
-     vl->addWidget(m_mpv);
+     vl->addWidget(mplayerVideo);
      vl->addWidget(ui->frameSlider);
      vl->addWidget(videoStatusLabel);
      vl->addWidget(videoTimeLabel);
@@ -638,8 +658,9 @@ void NeuralStylerWindow::finishStyling()
 void NeuralStylerWindow::seek(int pos)
 {
 
-    m_mpv->command(QVariantList() << "seek" << pos << "absolute");
-    qDebug()<<QString::number(ui->frameSlider->lowerValue())+"="+QString::number(ui->frameSlider->upperValue());
+
+    mp->command("pausing seek "+QString::number(pos)+" 2");
+   // qDebug()<<QString::number(ui->frameSlider->lowerValue())+"="+QString::number(ui->frameSlider->upperValue());
     if (ui->frameSlider->lowerValue()<ui->frameSlider->upperValue()){
 
     QTime posStart(0,0,0);
@@ -654,8 +675,9 @@ void NeuralStylerWindow::seek(int pos)
          videoStatusLabel->setText("<font color=\"red\">Invalid Duration!</font>");
     }
 }
-void NeuralStylerWindow::setSliderRange(int duration)
+void NeuralStylerWindow::setSliderRange(float dur)
 {
+    int duration=dur;
     ui->frameSlider->setRange(0, duration);
     ui->frameSlider->setLowerValue(0);
     ui->frameSlider->setUpperValue(duration);
@@ -821,10 +843,19 @@ void NeuralStylerWindow::initVideoTrim()
     if (!isImageOrGif()){
          ui->groupBox_2->setEnabled(true);
         videoTimeLabel->setText("");
-        m_mpv->command(QStringList() << "loadfile" << QUrl::fromLocalFile(ui->lineEditFilePath->text()).toString());
-        const bool paused = m_mpv->getProperty("pause").toBool();
-        if (!paused)
-            m_mpv->setProperty("pause", !paused);
+        if(mp){
+        mp=new Mplayer();
+        mp->setMplayerPath(mPath);
+        connect(mp,SIGNAL(gotduration(float)),this,SLOT(setSliderRange(float)));
+        connect(ui->frameSlider, SIGNAL(lowerValueChanged(int)), SLOT(seek(int)));
+        connect(ui->frameSlider, SIGNAL(upperValueChanged(int)), SLOT(seek(int)));
+        mp->setVideoWin(mplayerVideo->winId());
+        }
+        //m_mpv->command(QStringList() << "loadfile" << QUrl::fromLocalFile(ui->lineEditFilePath->text()).toString());
+         mp->play( QUrl::fromLocalFile(ui->lineEditFilePath->text()).toString());
+        // const bool paused = m_mpv->getProperty("pause").toBool();
+        //if (!paused)
+         //   m_mpv->setProperty("pause", !paused);
     }else{
         ui->groupBox_2->setEnabled(false);
         bitSettingsFirstRun->setBit(1,false);
@@ -904,6 +935,7 @@ void NeuralStylerWindow::dropEvent(QDropEvent* event)
      }
     if(pathList.size()>0)
       ui->lineEditFilePath->setText(pathList.at(0));
+     initVideoTrim();
    }
    //event->acceptProposedAction()
  }

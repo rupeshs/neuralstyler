@@ -18,10 +18,11 @@ SOURCES += main.cpp\
     paths.cpp \
     stylechainer.cpp \
     aboutdialog.cpp \
-    mpvwidget.cpp \
     qxtspanslider.cpp \
     styleintensitydialog.cpp \
-    framedialog.cpp
+    framedialog.cpp \
+    mplayer.cpp \
+    myprocess.cpp
 
 HEADERS  += neuralstylerwindow.h \
     ffmpegprocess.h \
@@ -31,9 +32,10 @@ HEADERS  += neuralstylerwindow.h \
     WinVersion.h \
     qxtspanslider_p.h \
     qxtspanslider.h \
-    mpvwidget.h \
     styleintensitydialog.h \
-    framedialog.h
+    framedialog.h \
+    mplayer.h \
+    myprocess.h
 
 FORMS    += neuralstylerwindow.ui \
     aboutdialog.ui \
@@ -46,10 +48,6 @@ QMAKE_LFLAGS += -Wl,-rpath,"'\$$ORIGIN/../lib'"
 TARGET=neuralstyler
 
 }
-
-INCLUDEPATH += $$PWD/mpv
-win32: LIBS += -L$$PWD/mpv/lib -lmpv.dll
-else:unix: LIBS += -L$$OUT_PWD/../../../projects/mylib/ -lmylib
 
 RESOURCES += \
     neuralstyler.qrc
