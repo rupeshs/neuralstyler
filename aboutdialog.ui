@@ -55,7 +55,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;NeuralStyler v1.0.0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Artistic style for your videos&lt;/p&gt;&lt;p&gt;For more styles &lt;a href=&quot;http://www.neuralstyler.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.neuralstyler.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2016 &lt;a href=&quot;https://github.com/rupeshs&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Rupesh Sreeraman&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;NeuralStyler v2.0.0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Artistic style for your videos/photos/GIF&lt;/p&gt;&lt;p&gt;FFmpeg Copyright © 2000-2015 the FFmpeg developers&lt;/p&gt;&lt;p&gt;For more styles &lt;a href=&quot;http://www.neuralstyler.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.neuralstyler.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Copyright © 2016 &lt;a href=&quot;https://github.com/rupeshs&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Rupesh Sreeraman&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="openExternalLinks">
     <bool>true</bool>

@@ -17,14 +17,14 @@
 #ifndef WINVERSION_H
 #define WINVERSION_H
 
-#define VER_FILEVERSION             1,0,0,0
-#define VER_FILEVERSION_STR         "1.0.0.0\0"
+#define VER_FILEVERSION             2,0,0,0
+#define VER_FILEVERSION_STR         "2.0.0.0\0"
 
-#define VER_PRODUCTVERSION          1,0,0,0
-#define VER_PRODUCTVERSION_STR      "1.0.0.0\0"
+#define VER_PRODUCTVERSION          2,0,0,0
+#define VER_PRODUCTVERSION_STR      "2.0.0.0\0"
 
 #define VER_COMPANYNAME_STR         "Rupesh Sreeraman\0"
-#define VER_FILEDESCRIPTION_STR     "NeuralStyler 1.0.0 \0"
+#define VER_FILEDESCRIPTION_STR     "NeuralStyler 2.0.0 \0"
 #define VER_INTERNALNAME_STR        "neuralstyler\0"
 #define VER_LEGALCOPYRIGHT_STR      "Copyright (c)2016 Rupesh Sreeraman\0"
 #define VER_ORIGINALFILENAME_STR    "neuralstyler.exe\0"

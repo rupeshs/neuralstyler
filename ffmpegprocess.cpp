@@ -32,6 +32,7 @@ void FfmpegProcess::startFfmpeg()
 #ifdef Q_OS_LINUX
     this->start("./ffmpeg",arguments());
 # endif
+   // qDebug()<<arguments();
 
 }
 void FfmpegProcess::readyReadStandardError()

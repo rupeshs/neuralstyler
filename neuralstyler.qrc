@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/">
         <file>neuralstyler-logo.jpg</file>
+        <file>images/fileopen.png</file>
+        <file>images/pause.png</file>
+        <file>images/paint.png</file>
+        <file>images/filesave .png</file>
+        <file>images/wm.png</file>
+        <file>images/paint-cancel.png</file>
+        <file>images/preview.png</file>
     </qresource>
 </RCC>

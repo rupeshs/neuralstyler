@@ -12,7 +12,10 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+paint icon :http://findicons.com/icon/85674/paint?id=85674
+
 */
+
 #ifndef NEURALSTYLERWINDOW_H
 #define NEURALSTYLERWINDOW_H
 
@@ -30,6 +33,17 @@
 #include <aboutdialog.h>
 #include <QPointer>
 #include <QTimer>
+#include <QSettings>
+#include <Qpainter>
+#include <styleintensitydialog.h>
+#include <QBitArray>
+#include "qxtspanslider.h"
+#include "mpvwidget.h"
+#include <QCloseEvent>
+#include "framedialog.h"
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 namespace Ui {
 class NeuralStylerWindow;
@@ -42,8 +56,10 @@ class NeuralStylerWindow : public QMainWindow
 public:
     explicit NeuralStylerWindow(QWidget *parent = 0);
     ~NeuralStylerWindow();
+    static int const EXIT_CODE_REBOOT = -123456789;
 
-
+signals:
+    void updatePreviewFrame(QString);
 private slots:
     void on_pushButonBrowseFile_clicked();
     void on_pushButtonProcess_clicked();
@@ -73,11 +89,46 @@ private slots:
     void update();
     void finishStyling();
 
+    void seek(int pos);
+    void setSliderRange(int duration);
+    bool isImageOrGif();
+    bool isGif();
+
+
+    void on_pushButtonPause_clicked();
+    void on_checkBoxNoScale_clicked();
+
+    void on_pushButonBrowseFileSave_clicked();
+
+    void on_actionGet_more_styles_triggered();
+
+    void on_sliderStyleStrength_valueChanged(int value);
+
+    void on_comboBoxResolution_currentIndexChanged(const QString &arg1);
+    void engineState(bool save);
+    void initVideoTrim();
+
+    void showEvent(QShowEvent * event);
+    void closeEvent(QCloseEvent *event);
+
+
+    void on_action_Help_triggered();
+
+    void on_pushButtonReset_clicked();
+
+    void on_pushButtonViewFrame_clicked();
+    void dropEvent(QDropEvent* event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+
 private:
     Ui::NeuralStylerWindow *ui;
+
     QPointer<FfmpegProcess> ffmpeg;
     QPointer<StyleChainer> fastNeuralStyle;
+
     Paths *paths;
+    MpvWidget *m_mpv;
 
     QStringList lstFrames;
 
@@ -96,8 +147,17 @@ private:
     int64_t frameCount;
 
     AboutDialog  *aboutDlg;
+    StyleIntensityDialog  *styleIntensityDlg;
+    FrameDialog *frameDlg;
     QTime tElapsed;
     QTimer *timer;
+
+    QLabel *videoTimeLabel;
+    QLabel *videoStatusLabel;
+
+    QSettings *settings;
+    QBitArray *bitSettingsFirstRun;
+
 
 };
 

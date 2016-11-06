@@ -67,3 +67,17 @@ void Paths::ensurePath(QString path)
     }
 }
 
+QString Paths::getDir(QWidget *parent , QString caption, QString root)
+{
+    QString dir = QFileDialog::getExistingDirectory(parent, caption,
+                                                    root,
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
+
+    if (dir.lastIndexOf("/")!=dir.length()-1)
+    {
+        dir+="/";
+    }
+
+    return dir;
+}

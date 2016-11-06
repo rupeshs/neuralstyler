@@ -28,6 +28,8 @@ static QRegExp rx_duration("Duration:\\s*(\\d+:\\d+:\\d*\\.\\d+)");
 static QRegExp rx_fps("(\\d*\\.\\d+)*.fps");
 static QRegExp rx_fps_num("(\\d+)*.fps");
 static QRegExp rx_frame_ct("frame=\\s*(\\d+)");
+static QRegExp rx_width("(\\d+)x.*");
+static QRegExp rx_height(".*x(\\d+)");
 class FfmpegProcess : public QProcess
 {
     Q_OBJECT

@@ -19,12 +19,14 @@
 #include<QString>
 #include <QDir>
 #include <QDebug>
+#include <QFileDialog>
 
 class Paths
 {
 public:
     Paths(QString appPath);
 
+    inline  void setStyledVideoPath(QString path){strStyledVideoPath=path;}
     inline  QString getStyledVideoPath(){return strStyledVideoPath+"/";}
     inline  QString getAudioPath(){return strAudioPath+"/";}
     inline  QString getStylePath(){return strStylePath+"/";}
@@ -36,6 +38,7 @@ public:
     void ensureAudioPath();
     void ensureStyledFramePath();
     void ensureStyledVideoPath();
+    QString getDir(QWidget *parent , QString caption, QString root);
 
 private:
     QString strAppPath;

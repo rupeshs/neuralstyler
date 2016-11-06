@@ -19,6 +19,8 @@
 StyleChainer::StyleChainer()
 {
    connect(this,SIGNAL(readyReadStandardOutput()),this,SLOT(readyReadStandardOutput()));
+   connect(this,SIGNAL(readyReadStandardError()),this,SLOT(readyReadStandardError()));
+
 }
 void StyleChainer::readyReadStandardOutput()
 {
@@ -33,6 +35,11 @@ void StyleChainer::readyReadStandardOutput()
 
 
 
+}
+void StyleChainer::readyReadStandardError()
+{
+    strConsoleErr+=readAllStandardOutput();
+    qDebug()<< strConsoleErr;
 }
 void StyleChainer::sytleIt()
 {qDebug()<<arguments();

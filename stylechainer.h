@@ -32,13 +32,16 @@ public:
     void setAppPath(QString appPath){strAppPath=appPath;}
     QString getProcessingTime(){return strElaspedTime;}
 
+
 public slots:
     void readyReadStandardOutput();
+    void readyReadStandardError();
     void sytleIt();
 
 private:
     QString strElaspedTime;
     QString strConsoleOut;
+    QString strConsoleErr;
     QString strAppPath;
 };
 

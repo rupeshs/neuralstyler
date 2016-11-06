@@ -18,9 +18,14 @@
 
 int main(int argc, char *argv[])
 {
+    int currentExitCode = 0;
+     do {
     QApplication a(argc, argv);
     NeuralStylerWindow w;
     w.show();
+    currentExitCode = a.exec();
+    } while( currentExitCode == NeuralStylerWindow::EXIT_CODE_REBOOT );
 
-    return a.exec();
+    return currentExitCode;
+
 }
