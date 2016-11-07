@@ -49,7 +49,11 @@ void Mplayer::setVideoWin(long int id)
     argfrontEnd<<"-wid"<<QString::number(id);
 
 }
+void Mplayer::setScaling(int width,int height)
+{
+    argfrontEnd<<"-vf"<<"scale="+QString::number(width)+":"+QString::number(height);
 
+}
 void Mplayer::play(QString filepath)
 {
     mProcess->clearArguments();
@@ -76,7 +80,7 @@ void Mplayer::play(QString filepath)
         mProcess->addArgument(strArgument);
     }
 
-   // qDebug()<< mProcess->arguments();
+   //qDebug()<< mProcess->arguments();
 
     mProcess->start();
 

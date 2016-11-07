@@ -39,6 +39,7 @@ public slots:
     void mplayerConsole(QByteArray ba);
     void setMplayerPath(QString path){mplayerPath=path;}
     void setVideoWin(long id);
+    void setScaling(int width,int height);
     void play(QString filepath);
     QString parsevalue( QString serstr,QString sep,QString str);
     void  command(QString cmd);
