@@ -1,0 +1,7 @@
+site_name: Help
+pages:
+- Introduction: index.md
+- Settings: options.md
+- Styles: styles.md
+- How to style : hstyle.md
+theme: readthedocs
