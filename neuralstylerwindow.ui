@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>850</width>
     <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>800</width>
+    <width>850</width>
     <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>800</width>
+    <width>870</width>
     <height>400</height>
    </size>
   </property>
@@ -38,7 +38,7 @@
      <rect>
       <x>10</x>
       <y>350</y>
-      <width>491</width>
+      <width>531</width>
       <height>20</height>
      </rect>
     </property>
@@ -85,7 +85,7 @@
      <rect>
       <x>10</x>
       <y>120</y>
-      <width>491</width>
+      <width>531</width>
       <height>191</height>
      </rect>
     </property>
@@ -100,7 +100,7 @@
       <rect>
        <x>190</x>
        <y>30</y>
-       <width>161</width>
+       <width>167</width>
        <height>25</height>
       </rect>
      </property>
@@ -286,9 +286,9 @@
      <property name="geometry">
       <rect>
        <x>360</x>
-       <y>20</y>
-       <width>121</width>
-       <height>41</height>
+       <y>0</y>
+       <width>131</width>
+       <height>61</height>
       </rect>
      </property>
      <property name="title">
@@ -298,7 +298,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>30</y>
         <width>40</width>
         <height>20</height>
        </rect>
@@ -320,7 +320,7 @@
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>10</y>
+        <y>30</y>
         <width>40</width>
         <height>20</height>
        </rect>
@@ -342,7 +342,7 @@
       <property name="geometry">
        <rect>
         <x>60</x>
-        <y>10</y>
+        <y>30</y>
         <width>21</width>
         <height>16</height>
        </rect>
@@ -366,60 +366,10 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>13</x>
-      <y>320</y>
-      <width>489</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
-     <item>
-      <widget class="QLabel" name="labelStatus">
-       <property name="minimumSize">
-        <size>
-         <width>230</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>230</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QProgressBar" name="progressBarFrame">
-       <property name="minimumSize">
-        <size>
-         <width>251</width>
-         <height>18</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>251</width>
-         <height>18</height>
-        </size>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>560</x>
       <y>20</y>
       <width>281</width>
       <height>351</height>
@@ -450,7 +400,7 @@
      <rect>
       <x>11</x>
       <y>20</y>
-      <width>494</width>
+      <width>531</width>
       <height>25</height>
      </rect>
     </property>
@@ -504,7 +454,7 @@
      <rect>
       <x>11</x>
       <y>50</y>
-      <width>495</width>
+      <width>531</width>
       <height>25</height>
      </rect>
     </property>
@@ -553,22 +503,28 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>483</width>
+      <x>11</x>
+      <y>81</y>
+      <width>536</width>
       <height>37</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <item row="0" column="0">
       <widget class="QPushButton" name="pushButtonOpenOutput">
        <property name="minimumSize">
         <size>
-         <width>132</width>
+         <width>155</width>
          <height>35</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>155</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="text">
@@ -586,17 +542,17 @@
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="1">
       <widget class="QPushButton" name="pushButtonViewFrame">
        <property name="minimumSize">
         <size>
-         <width>115</width>
+         <width>120</width>
          <height>35</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>111</width>
+         <width>120</width>
          <height>35</height>
         </size>
        </property>
@@ -615,12 +571,18 @@
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="2">
       <widget class="QPushButton" name="pushButtonPause">
        <property name="minimumSize">
         <size>
-         <width>0</width>
+         <width>81</width>
          <height>35</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>81</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="text">
@@ -638,17 +600,17 @@
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="3">
       <widget class="QPushButton" name="pushButtonProcess">
        <property name="minimumSize">
         <size>
-         <width>141</width>
+         <width>160</width>
          <height>35</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>141</width>
+         <width>160</width>
          <height>35</height>
         </size>
        </property>
@@ -669,6 +631,56 @@
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>322</y>
+      <width>529</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="labelStatus">
+       <property name="minimumSize">
+        <size>
+         <width>270</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>270</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QProgressBar" name="progressBarFrame">
+       <property name="minimumSize">
+        <size>
+         <width>251</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>251</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
@@ -676,14 +688,15 @@
    <zorder>layoutWidget</zorder>
    <zorder>groupBox</zorder>
    <zorder>groupBox_2</zorder>
+   <zorder></zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>21</height>
+     <width>850</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">

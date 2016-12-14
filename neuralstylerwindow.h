@@ -34,7 +34,7 @@ paint icon :http://findicons.com/icon/85674/paint?id=85674
 #include <QPointer>
 #include <QTimer>
 #include <QSettings>
-#include <Qpainter>
+#include <QPainter>
 #include <styleintensitydialog.h>
 #include <QBitArray>
 #include "qxtspanslider.h"

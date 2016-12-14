@@ -49,6 +49,6 @@ private:
     QString strStylePath;
     void ensurePath(QString pth);
 };
-typedef __int64 int64_t;
+
 
 #endif // PATHS_H

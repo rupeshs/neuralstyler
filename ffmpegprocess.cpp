@@ -23,7 +23,7 @@ FfmpegProcess::FfmpegProcess()
 }
 void FfmpegProcess::startFfmpeg()
 {
-    qDebug()<<arguments();
+    //qDebug()<<arguments();
     strFps="";
 
 #ifdef Q_OS_WIN

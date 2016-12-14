@@ -53,70 +53,77 @@ NeuralStylerWindow::NeuralStylerWindow(QWidget *parent) :
 #ifdef Q_OS_OPENBSD
     mPath="/usr/local/bin/mplayer";
 # endif
-     qDebug()<<mPath;
+    if(!QFile(mPath).exists()){
+        QMessageBox::critical(this,qApp->applicationName(),"Oops..MPlayer not found,Video trimming will not work...Please install MPlayer");
+    }
+
+    qDebug()<<mPath;
     mp=new Mplayer();
     mp->setMplayerPath(mPath);
     connect(mp,SIGNAL(gotduration(float)),this,SLOT(setSliderRange(float)));
     connect(ui->frameSlider, SIGNAL(lowerValueChanged(int)), SLOT(seek(int)));
     connect(ui->frameSlider, SIGNAL(upperValueChanged(int)), SLOT(seek(int)));
 
-     mplayerVideo=new QLabel(this);
-     mplayerVideo->setGeometry(0,0,261,181);
-     mplayerVideo->setMinimumWidth(261);
+    mplayerVideo=new QLabel(this);
+    mplayerVideo->setGeometry(0,0,261,181);
+    mplayerVideo->setMinimumWidth(261);
 
 
-     mplayerVideo->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
-     mplayerVideo->setStyleSheet("background-color:black;");
-     mp->setVideoWin(mplayerVideo->winId());
+    mplayerVideo->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
+    mplayerVideo->setStyleSheet("background-color:black;");
+    mp->setVideoWin(mplayerVideo->winId());
+#ifdef Q_OS_LINUX
+    mp->setScaling(261,181);
+#endif
 
-     QVBoxLayout *vl = new QVBoxLayout();
+            QVBoxLayout *vl = new QVBoxLayout();
 
-     videoTimeLabel = new QLabel("00:00:00");
-     videoStatusLabel = new QLabel("Select video section");
+    videoTimeLabel = new QLabel("00:00:00");
+    videoStatusLabel = new QLabel("Select video section");
 
-     vl->addWidget(mplayerVideo);
-     vl->addWidget(ui->frameSlider);
-     vl->addWidget(videoStatusLabel);
-     vl->addWidget(videoTimeLabel);
-     ui->groupBox_2->setLayout(vl);
+    vl->addWidget(mplayerVideo);
+    vl->addWidget(ui->frameSlider);
+    vl->addWidget(videoStatusLabel);
+    vl->addWidget(videoTimeLabel);
+    ui->groupBox_2->setLayout(vl);
 
-     ui->frameSlider->setHandleMovementMode(QxtSpanSlider::NoCrossing);
-     ui->pushButtonPause->setEnabled(false);
-     ui->pushButtonViewFrame->setEnabled(false);
+    ui->frameSlider->setHandleMovementMode(QxtSpanSlider::NoCrossing);
+    ui->pushButtonPause->setEnabled(false);
+    ui->pushButtonViewFrame->setEnabled(false);
 
-     //Check settings exists
-     if(!QFile(qApp->applicationDirPath()+"/neuralstyler.ini").exists()){
-          qDebug()<<"Settings not found!";
-          paths->setStyledVideoPath(qApp->applicationDirPath()+"/styledvideo");
-          ui->lineEditSavePath->setText( paths->getStyledVideoPath());
+    //Check settings exists
+    if(!QFile(qApp->applicationDirPath()+"/neuralstyler.ini").exists()){
+        qDebug()<<"Settings not found!";
+        paths->setStyledVideoPath(qApp->applicationDirPath()+"/styledvideo");
+        ui->lineEditSavePath->setText( paths->getStyledVideoPath());
 
-     }
+    }
 
-     settings=new QSettings(qApp->applicationDirPath()+"/neuralstyler.ini",QSettings::IniFormat,this);
-
-
-     qDebug()<<settings->value("Main/destination","").toString();
-     if(settings->value("Main/destination","").toString().compare("")==0){
-
-         settings->beginGroup("Main");
-         settings->setValue("destination", paths->getStyledVideoPath());
-         settings->endGroup();
+    settings=new QSettings(qApp->applicationDirPath()+"/neuralstyler.ini",QSettings::IniFormat,this);
 
 
-     }
-     else{
-         ui->lineEditSavePath->setText(settings->value("Main/destination",paths->getStyledVideoPath()).toString());
-         paths->setStyledVideoPath(ui->lineEditSavePath->text());
-     }
+    qDebug()<<settings->value("Main/destination","").toString();
+    if(settings->value("Main/destination","").toString().compare("")==0){
 
-     ui->groupBox_2->setEnabled(false);
-     ui->groupBoxRes->setVisible(false);
+        settings->beginGroup("Main");
+        settings->setValue("destination", paths->getStyledVideoPath());
+        settings->endGroup();
 
-     bitSettingsFirstRun=new QBitArray(2,true);
-     //bit 0 first run
-     //bit 1 load trim slider
-     engineState(false);
-     setAcceptDrops(true);
+
+    }
+    else{
+        ui->lineEditSavePath->setText(settings->value("Main/destination",paths->getStyledVideoPath()).toString());
+        paths->setStyledVideoPath(ui->lineEditSavePath->text());
+    }
+
+    ui->groupBox_2->setEnabled(false);
+    ui->groupBoxRes->setVisible(false);
+
+    bitSettingsFirstRun=new QBitArray(2,true);
+    //bit 0 first run
+    //bit 1 load trim slider
+    engineState(false);
+    setAcceptDrops(true);
 
 
 
@@ -144,25 +151,25 @@ void NeuralStylerWindow::on_pushButonBrowseFile_clicked()
 void NeuralStylerWindow::on_pushButtonProcess_clicked()
 {
 
-   if (ui->pushButtonProcess->text().compare("Cancel Neural Styling")==0){
+    if (ui->pushButtonProcess->text().compare("Cancel Neural Styling")==0){
 
-       QMessageBox::StandardButton reply;
+        QMessageBox::StandardButton reply;
         reply = QMessageBox::question(this, "NeuralStyler", "Do you want to stop styling ?",
                                       QMessageBox::Yes|QMessageBox::No);
         if (reply == QMessageBox::Yes) {
-           engineState(true);
-           if (ffmpeg){
-            ffmpeg->write("q\n");
-            ffmpeg->waitForBytesWritten(1000);
-           }
+            engineState(true);
+            if (ffmpeg){
+                ffmpeg->write("q\n");
+                ffmpeg->waitForBytesWritten(1000);
+            }
             qApp->exit( NeuralStylerWindow::EXIT_CODE_REBOOT );
         }
         else{
             return;
         }
-   }
+    }
 
-   // qApp->exit( NeuralStylerWindow::EXIT_CODE_REBOOT );
+    // qApp->exit( NeuralStylerWindow::EXIT_CODE_REBOOT );
     tElapsed.start();
     timer->start(1000);
 
@@ -257,7 +264,7 @@ void NeuralStylerWindow::extractFrames()
     QString strResolution=ui->comboBoxResolution->currentText();
 
     if (strResolution.compare("Custom")==0) {
-      strResolution=ui->lineEditWidth->text()+"x"+ui->lineEditHeight->text();
+        strResolution=ui->lineEditWidth->text()+"x"+ui->lineEditHeight->text();
     }
 
     QString strWidth;
@@ -265,11 +272,11 @@ void NeuralStylerWindow::extractFrames()
 
     if (rx_width.indexIn(strResolution)>-1) {
 
-            strWidth=rx_width.cap(1);
+        strWidth=rx_width.cap(1);
     }
     if (rx_height.indexIn(strResolution)>-1) {
 
-            strHeight=rx_height.cap(1);
+        strHeight=rx_height.cap(1);
     }
 
     //<<"-ss"<<QString::number(startPos)<<"-t"<<QString::number(stopPos-startPos)
@@ -286,11 +293,11 @@ void NeuralStylerWindow::extractFrames()
     //Scale image
     if (!ui->checkBoxNoScale->isChecked()){
 
-    //aspect ratio
-    if(ui->checkBoxKeepAspectRatio->isChecked())
-       arguments <<"-vf"<<"scale="+strWidth+":"+QString::number(-1)+":flags=lanczos";
-    else
-       arguments<<"-vf"<<"scale="+strResolution.replace("x",":")+":flags=lanczos";
+        //aspect ratio
+        if(ui->checkBoxKeepAspectRatio->isChecked())
+            arguments <<"-vf"<<"scale="+strWidth+":"+QString::number(-1)+":flags=lanczos";
+        else
+            arguments<<"-vf"<<"scale="+strResolution.replace("x",":")+":flags=lanczos";
     }
 
     //output
@@ -365,18 +372,18 @@ void NeuralStylerWindow::styleFrames()
 
     //python generate.py rup.jpeg -m models/seurat.model -o rupstyle2.jpg
     processingFrameCount=0;
-   if(lstFrames.count()>0)
-      chainerProcess();
-   else
-   {
-       QMessageBox::critical(this,qApp->applicationName(),"Styling failed! Invalid file.");
-       finishStyling();
+    if(lstFrames.count()>0)
+        chainerProcess();
+    else
+    {
+        QMessageBox::critical(this,qApp->applicationName(),"Styling failed! Invalid file.");
+        finishStyling();
 
-   }
-   if(lstFrames.size()>1){
-       ui->pushButtonViewFrame->setEnabled(true);
-       ui->pushButtonPause->setEnabled(true);
-   }
+    }
+    if(lstFrames.size()>1){
+        ui->pushButtonViewFrame->setEnabled(true);
+        ui->pushButtonPause->setEnabled(true);
+    }
 
 }
 void NeuralStylerWindow::fastNeuralStyleStarted()
@@ -398,7 +405,7 @@ void NeuralStylerWindow::fastNeuralStyleCompleted(int ec)
 
     }
     else
-       {
+    {
         QImage top(paths->getStyledFramePath()+lstFrames.at(processingFrameCount-1));
         QImage bot(paths->getFramePath()+lstFrames.at(processingFrameCount-1));
         QPixmap combined(bot.size());
@@ -446,18 +453,18 @@ void NeuralStylerWindow::fastNeuralStyleCompleted(int ec)
         p2.end();
         combined.save(paths->getStyledFramePath()+"ns"+lstFrames.at(processingFrameCount-1));
 
-       // ui->labelStyleImage->setPixmap(QPixmap(paths->getStyledFramePath()+"ns"+lstFrames.at(processingFrameCount-1)).scaled(QSize(120,90),Qt::KeepAspectRatio,Qt::FastTransformation));
-       // ui->labelStyleImage->setEnabled(true);
+        // ui->labelStyleImage->setPixmap(QPixmap(paths->getStyledFramePath()+"ns"+lstFrames.at(processingFrameCount-1)).scaled(QSize(120,90),Qt::KeepAspectRatio,Qt::FastTransformation));
+        // ui->labelStyleImage->setEnabled(true);
         emit updatePreviewFrame(paths->getStyledFramePath()+"ns"+lstFrames.at(processingFrameCount-1));
         qDebug()<<"Style Frame ok";
-       }
+    }
 
     //delete fastNeuralStyle;
     fastNeuralStyle->deleteLater();
     ui->progressBarOverall->setValue(81);
 
     if (ui->pushButtonPause->text().compare("Pause")==0)
-      chainerProcess();
+        chainerProcess();
 
 }
 
@@ -632,7 +639,7 @@ void NeuralStylerWindow::update()
 void NeuralStylerWindow::finishStyling()
 {
     ui->pushButtonProcess->setText("Create Artistic Style");
-      ui->pushButtonProcess->setIcon(QPixmap(":/images/paint.png"));
+    ui->pushButtonProcess->setIcon(QPixmap(":/images/paint.png"));
 
     ui->labelStatus->setText("Styling completed.");
     ui->groupBox->setDisabled(false);
@@ -660,19 +667,19 @@ void NeuralStylerWindow::seek(int pos)
 
 
     mp->command("pausing seek "+QString::number(pos)+" 2");
-   // qDebug()<<QString::number(ui->frameSlider->lowerValue())+"="+QString::number(ui->frameSlider->upperValue());
+    // qDebug()<<QString::number(ui->frameSlider->lowerValue())+"="+QString::number(ui->frameSlider->upperValue());
     if (ui->frameSlider->lowerValue()<ui->frameSlider->upperValue()){
 
-    QTime posStart(0,0,0);
-    QTime posEnd(0,0,0);
-    QTime styleDur(0,0,0);
-    int styleDuration=ui->frameSlider->upperValue()-ui->frameSlider->lowerValue();
-    videoTimeLabel->setText("Length : "+styleDur.addSecs(styleDuration).toString("hh:mm:ss"));
-    QString strVideoStatus="Style video from "+posStart.addSecs(ui->frameSlider->lowerValue()).toString("hh:mm:ss")+" to "+posEnd.addSecs(ui->frameSlider->upperValue()).toString("hh:mm:ss")+"";
-    videoStatusLabel->setText(strVideoStatus);
+        QTime posStart(0,0,0);
+        QTime posEnd(0,0,0);
+        QTime styleDur(0,0,0);
+        int styleDuration=ui->frameSlider->upperValue()-ui->frameSlider->lowerValue();
+        videoTimeLabel->setText("Length : "+styleDur.addSecs(styleDuration).toString("hh:mm:ss"));
+        QString strVideoStatus="Style video from "+posStart.addSecs(ui->frameSlider->lowerValue()).toString("hh:mm:ss")+" to "+posEnd.addSecs(ui->frameSlider->upperValue()).toString("hh:mm:ss")+"";
+        videoStatusLabel->setText(strVideoStatus);
     }
     else{
-         videoStatusLabel->setText("<font color=\"red\">Invalid Duration!</font>");
+        videoStatusLabel->setText("<font color=\"red\">Invalid Duration!</font>");
     }
 }
 void NeuralStylerWindow::setSliderRange(float dur)
@@ -685,9 +692,9 @@ void NeuralStylerWindow::setSliderRange(float dur)
     QString strVideoDuration="Length :"+tmDuration.addSecs(duration).toString("hh:mm:ss");
     videoTimeLabel->setText(strVideoDuration);
     if(bitSettingsFirstRun->testBit(1)){
-    ui->frameSlider->setUpperPosition(settings->value("State/trimup",1).toInt());
-    ui->frameSlider->setLowerPosition(settings->value("State/trimlow",0).toInt());
-    bitSettingsFirstRun->setBit(1,0);
+        ui->frameSlider->setUpperPosition(settings->value("State/trimup",1).toInt());
+        ui->frameSlider->setLowerPosition(settings->value("State/trimlow",0).toInt());
+        bitSettingsFirstRun->setBit(1,0);
     }
 
 }
@@ -743,40 +750,40 @@ void NeuralStylerWindow::on_pushButtonPause_clicked()
         ui->pushButtonPause->setText("Pause");
         //resume
         chainerProcess();
-         timer->start();
-         ui->progressBarFrame->setEnabled(true);
-         ui->progressBarOverall->setEnabled(true);
+        timer->start();
+        ui->progressBarFrame->setEnabled(true);
+        ui->progressBarOverall->setEnabled(true);
     }
 }
 
 void NeuralStylerWindow::on_checkBoxNoScale_clicked()
 {
- if(ui->checkBoxNoScale->isChecked()){
-  ui->comboBoxResolution->setDisabled(true);
-  ui->checkBoxKeepAspectRatio->setDisabled(true);
-  ui->lineEditHeight->setDisabled(true);
-  ui->lineEditWidth->setDisabled(true);
+    if(ui->checkBoxNoScale->isChecked()){
+        ui->comboBoxResolution->setDisabled(true);
+        ui->checkBoxKeepAspectRatio->setDisabled(true);
+        ui->lineEditHeight->setDisabled(true);
+        ui->lineEditWidth->setDisabled(true);
 
- }
- else{
-     ui->comboBoxResolution->setDisabled(false);
-     ui->checkBoxKeepAspectRatio->setDisabled(false);
-     ui->lineEditHeight->setDisabled(false);
-     ui->lineEditWidth->setDisabled(false);
- }
+    }
+    else{
+        ui->comboBoxResolution->setDisabled(false);
+        ui->checkBoxKeepAspectRatio->setDisabled(false);
+        ui->lineEditHeight->setDisabled(false);
+        ui->lineEditWidth->setDisabled(false);
+    }
 }
 
 void NeuralStylerWindow::on_pushButonBrowseFileSave_clicked()
 {
-   QString dir = paths->getDir(this,"Open a Directory for output:","");
-  if (dir.isEmpty())
+    QString dir = paths->getDir(this,"Open a Directory for output:","");
+    if (dir.isEmpty())
         return;
 
-  ui->lineEditSavePath->setText(dir);
-  settings->beginGroup("Main");
-  settings->setValue("destination", dir);
-  settings->endGroup();
-  paths->setStyledVideoPath(ui->lineEditSavePath->text());
+    ui->lineEditSavePath->setText(dir);
+    settings->beginGroup("Main");
+    settings->setValue("destination", dir);
+    settings->endGroup();
+    paths->setStyledVideoPath(ui->lineEditSavePath->text());
 }
 
 void NeuralStylerWindow::on_actionGet_more_styles_triggered()
@@ -792,17 +799,17 @@ void NeuralStylerWindow::on_sliderStyleStrength_valueChanged(int value)
 
 void NeuralStylerWindow::on_comboBoxResolution_currentIndexChanged(const QString &arg1)
 {
-   if (arg1.compare("Custom")==0)
-   {
-       ui->groupBoxRes->setVisible(true);
+    if (arg1.compare("Custom")==0)
+    {
+        ui->groupBoxRes->setVisible(true);
 
-   }
-   else{
+    }
+    else{
         ui->groupBoxRes->setVisible(false);
-   }
+    }
 }
- void NeuralStylerWindow::engineState(bool isSave)
- {
+void NeuralStylerWindow::engineState(bool isSave)
+{
     if (isSave){
         settings->beginGroup("State");
         settings->setValue("processfile", ui->lineEditFilePath->text());
@@ -817,8 +824,8 @@ void NeuralStylerWindow::on_comboBoxResolution_currentIndexChanged(const QString
         settings->setValue("trimlow", ui->frameSlider->lowerValue());
         settings->endGroup();
 
-     }
-     else{
+    }
+    else{
 
         ui->lineEditFilePath->setText(settings->value("State/processfile","").toString());
         ui->checkBoxKeepAspectRatio->setChecked(settings->value("State/keepaspectratio",true).toBool());
@@ -835,27 +842,32 @@ void NeuralStylerWindow::on_comboBoxResolution_currentIndexChanged(const QString
 
     }
 
- }
+}
 void NeuralStylerWindow::initVideoTrim()
 {
     ui->pushButtonPause->setEnabled(false);
     ui->pushButtonViewFrame->setEnabled(false);
     if (!isImageOrGif()){
-         ui->groupBox_2->setEnabled(true);
+        ui->groupBox_2->setEnabled(true);
         videoTimeLabel->setText("");
         if(mp){
-        mp=new Mplayer();
-        mp->setMplayerPath(mPath);
-        connect(mp,SIGNAL(gotduration(float)),this,SLOT(setSliderRange(float)));
-        connect(ui->frameSlider, SIGNAL(lowerValueChanged(int)), SLOT(seek(int)));
-        connect(ui->frameSlider, SIGNAL(upperValueChanged(int)), SLOT(seek(int)));
-        mp->setVideoWin(mplayerVideo->winId());
+            mp=new Mplayer();
+            mp->setMplayerPath(mPath);
+            connect(mp,SIGNAL(gotduration(float)),this,SLOT(setSliderRange(float)));
+            connect(ui->frameSlider, SIGNAL(lowerValueChanged(int)), SLOT(seek(int)));
+            connect(ui->frameSlider, SIGNAL(upperValueChanged(int)), SLOT(seek(int)));
+            mp->setVideoWin(mplayerVideo->winId());
+#ifdef Q_OS_LINUX
+    mp->setScaling(261,181);
+#endif
+
+
         }
         //m_mpv->command(QStringList() << "loadfile" << QUrl::fromLocalFile(ui->lineEditFilePath->text()).toString());
-         mp->play( QUrl::fromLocalFile(ui->lineEditFilePath->text()).toString());
+        mp->play( QUrl::fromLocalFile(ui->lineEditFilePath->text()).toString());
         // const bool paused = m_mpv->getProperty("pause").toBool();
         //if (!paused)
-         //   m_mpv->setProperty("pause", !paused);
+        //   m_mpv->setProperty("pause", !paused);
     }else{
         ui->groupBox_2->setEnabled(false);
         bitSettingsFirstRun->setBit(1,false);
@@ -872,35 +884,35 @@ void NeuralStylerWindow::showEvent(QShowEvent * event)
 }
 void NeuralStylerWindow::closeEvent(QCloseEvent *event)
 {
-      event->ignore();
-      if (ui->pushButtonProcess->text().compare("Cancel Neural Styling")==0)
-      {if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation?",
-                                                     "You haven't finished styling yet. Do you want to exit without finishing?",
-                                                     QMessageBox::Yes|QMessageBox::No))
-          {
-              if(ffmpeg){
-                  ffmpeg->write("q\n");
-                  ffmpeg->waitForBytesWritten();
-              }
-             // qDebug()<<"wrote q";
-              event->accept();
+    event->ignore();
+    if (ui->pushButtonProcess->text().compare("Cancel Neural Styling")==0)
+    {if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation?",
+                                                   "You haven't finished styling yet. Do you want to exit without finishing?",
+                                                   QMessageBox::Yes|QMessageBox::No))
+        {
+            if(ffmpeg){
+                ffmpeg->write("q\n");
+                ffmpeg->waitForBytesWritten();
+            }
+            // qDebug()<<"wrote q";
+            event->accept();
 
-          }
-      }
-      else
-      {
-          event->accept();
+        }
+    }
+    else
+    {
+        event->accept();
 
 
-      }
-      engineState(true);
+    }
+    engineState(true);
 
 }
 
 
 void NeuralStylerWindow::on_action_Help_triggered()
 {
-QDesktopServices::openUrl(QUrl("http://neuralstyler.com/help/"));
+    QDesktopServices::openUrl(QUrl("http://neuralstyler.com/help/"));
 }
 
 void NeuralStylerWindow::on_pushButtonReset_clicked()
@@ -920,25 +932,25 @@ void NeuralStylerWindow::on_pushButtonViewFrame_clicked()
     frameDlg->show();
 }
 void NeuralStylerWindow::dropEvent(QDropEvent* event)
- {
-   const QMimeData* mimeData = event->mimeData();
+{
+    const QMimeData* mimeData = event->mimeData();
 
-   if (mimeData->hasUrls())
-   {
-     QStringList pathList;
-     QList<QUrl> urlList = mimeData->urls();
+    if (mimeData->hasUrls())
+    {
+        QStringList pathList;
+        QList<QUrl> urlList = mimeData->urls();
 
-     // extract the local paths of the files
-     for (int i = 0; i < urlList.size(); i++)
-     {
-       pathList.append(urlList.at(i).toLocalFile());
-     }
-    if(pathList.size()>0)
-      ui->lineEditFilePath->setText(pathList.at(0));
-     initVideoTrim();
-   }
-   //event->acceptProposedAction()
- }
+        // extract the local paths of the files
+        for (int i = 0; i < urlList.size(); i++)
+        {
+            pathList.append(urlList.at(i).toLocalFile());
+        }
+        if(pathList.size()>0)
+            ui->lineEditFilePath->setText(pathList.at(0));
+        initVideoTrim();
+    }
+    //event->acceptProposedAction()
+}
 void NeuralStylerWindow::dragMoveEvent(QDragMoveEvent *event)
 {
     event->acceptProposedAction();
