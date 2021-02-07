@@ -2,6 +2,7 @@
 Turn Your Videos/photos into Artwork
 
 NeuralStyler Artificial Intelligence converts your videos into art works by using styles of famous artists: Van Gogh,Wassily Kandinsky,Georges Seurat etc
+
 Features
 --------
 * Style videos,gif animation and photos
