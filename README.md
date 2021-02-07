@@ -9,23 +9,23 @@ Features
 * Faster AI styling algorithm
 * Extensible styling system(Plugin)
 
-###Dependencies
+## Dependencies
 * Qt 5.x
 * Python 2.7 (Virtualenv for Ubuntu,WinPython 64 bit for Windows)
 * Chainer
 * ffmpeg
 
-###How to install style</h3>
+### How to install style</h3>
 Simply download the zip file and extract it you will get two files<br>
 	 **style_name.model** 
 	 **style_name-style.jpg**
 	 copy these two files to the styles folder and run NeuralStyler.
 
-###Create your own styles
+### Create your own styles
 Please read the neural network training instructions
 [Read](https://github.com/yusuketomoto/chainer-fast-neuralstyle#train)
 
-####Dependencies
+#### Dependencies
 [Chainer](http://chainer.org) <br>
 [Microsoft COCO dataset](http://mscoco.org/dataset/#download)
 
